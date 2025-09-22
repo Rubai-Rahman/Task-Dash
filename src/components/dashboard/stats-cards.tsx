@@ -12,6 +12,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { DashboardStats } from '@/lib/data/data-store';
+import { RoleGuard } from '../auth/role-gurd';
 
 interface StatsCardsProps {
   stats: DashboardStats;
