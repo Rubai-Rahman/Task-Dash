@@ -11,7 +11,7 @@ import {
   Target,
   Shield,
 } from 'lucide-react';
-import type { DashboardStats } from '@/lib/data-store';
+import { DashboardStats } from '@/lib/data/data-store';
 
 interface StatsCardsProps {
   stats: DashboardStats;
