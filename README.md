@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task-Dash – SaaS Task Management Dashboard
 
-## Getting Started
+## ⏱️ Development Time
 
-First, run the development server:
+Total time spent: **7 hours 30 minutes**
+
+Time breakdown:
+
+- Initial setup and project structure: 1h
+- Core functionality and state management: 2h
+- UI Components and styling: 2h 30m
+- Authentication and user management: 1h
+- Testing and bug fixes: 1h
+
+## 🏗️ Getting Started
+
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Using Yarn (recommended)
+yarn install
+
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Using Yarn (recommended)
+yarn dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+The application will be available at `http://localhost:3000`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This is a **Next.js 15** project built with modern frontend tooling (React, Tailwind CSS, Zustand, and shadcn/ui).  
+It implements a task management dashboard with authentication, protected routes, CRUD operations, and role-based UI.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚀 Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Authentication**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  - Login page with mock API authentication
+  - Protected routes (redirects to login if not logged in)
+  - Persistent auth state (Zustand + localStorage)
+
+- **Dashboard**
+
+  - Fetches mock API data
+  - Displays key metrics with charts and tables (Recharts)
+  - Responsive layout with sidebar navigation
+
+- **CRUD**
+
+  - Create, Read, Update, Delete operations for **Users** (mock data store)
+  - Instant UI updates using Zustand state management
+
+- **Table with Filters**
+
+  - Search, filter, and sort user data
+  - Responsive and keyboard accessible
+
+- **Profile Page**
+
+  - Editable user profile (name, email, bio)
+  - Optimistic UI updates with toast notifications
+
+- **Bonus**
+  - **Role-based UI** – Admin vs Normal User see different navigation and pages
+
+---
+
+## 🛠️ Tech Stack
+
+- **Next.js 15 (App Router)**
+- **React 18**
+- **TypeScript**
+- **Tailwind CSS** (utility-first styling)
+- **shadcn/ui** (accessible headless components)
+- **Zustand** (global state management)
+- **Recharts** (charts & graphs)
+- **Sonner** (toast notifications)
+
+---
+
+## 📝 Additional Notes
+
+- Built with modern best practices and TypeScript
+- Fully responsive design for all screen sizes
+- Role-based access control for admin and user views
+- Optimistic UI updates for better UX
+- Comprehensive error handling and loading states
+- Accessible components following WCAG guidelines
