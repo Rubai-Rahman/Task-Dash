@@ -21,7 +21,7 @@ const users = [
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
   const user = users.find((u) => u.email === email);
-  if (!user || password !== 'demo123') {
+  if (!user || password !== 'StrongUser#1') {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
 

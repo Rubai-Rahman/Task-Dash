@@ -42,6 +42,11 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --gradient-primary: var(--gradient-primary);
+  --chart-1: var(--chart-1);
+  --chart-2: var(--chart-2);
+  --chart-3: var(--chart-3);
+  --chart-4: var(--chart-4);
+  --chart-5: var(--chart-5);
 }
 
 :root {
@@ -123,6 +128,12 @@
   --sidebar-primary-foreground: oklch(0.98 0 0);
   --sidebar-accent: oklch(0.2 0.01 270);
   --sidebar-accent-foreground: oklch(0.98 0 0);
+  /* Chart palette (light) - HSL triplets for hsl(var(--chart-x)) */
+  --chart-1: 220 90% 56%; /* blue */
+  --chart-2: 142 72% 45%; /* green */
+  --chart-3: 20 90% 56%; /* orange */
+  --chart-4: 262 85% 60%; /* purple */
+  --chart-5: 0 84% 60%; /* red */
 }
 .dark {
   --background: oklch(0.145 0 0);
@@ -143,11 +154,12 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  /* Chart palette (dark) - HSL triplets for hsl(var(--chart-x)) */
+  --chart-1: 217 91% 60%;
+  --chart-2: 142 70% 45%;
+  --chart-3: 20 92% 58%;
+  --chart-4: 262 90% 68%;
+  --chart-5: 0 84% 63%;
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);

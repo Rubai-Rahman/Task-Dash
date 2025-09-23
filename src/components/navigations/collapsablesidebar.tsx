@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   CheckSquare,
@@ -61,8 +61,10 @@ const navigationItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const handleLogout = () => {
-    logout();
+  const router = useRouter();
+  const handleLogout = async () => {
+    await logout();
+    router.replace('/login');
   };
   const getNavCls = (path: string) => {
     const isActive = pathname === path;

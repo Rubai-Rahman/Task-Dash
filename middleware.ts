@@ -4,7 +4,7 @@ import { COOKIE_NAME, JWT_SECRET } from '@/lib/session';
 
 const PUBLIC_PATHS = [
   '/',
-  '/auth/login',
+  '/login',
   '/api/auth/login',
   '/api/auth/logout',
   '/api/auth/me',
@@ -27,21 +27,21 @@ export async function middleware(req: NextRequest) {
 
   const token = req.cookies.get(COOKIE_NAME)?.value;
   if (!token) {
-    const url = new URL('/auth/login', req.url);
+    const url = new URL('/login', req.url);
     url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
   }
 
   const payload = await verifyJwt(token, JWT_SECRET);
   if (!payload) {
-    const url = new URL('/auth/login', req.url);
+    const url = new URL('/login', req.url);
     url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
   }
 
   // Optional role guard example: protect /admin* for admin only
   if (pathname.startsWith('/admin')) {
-    if ((payload as any).role !== 'admin') {
+    if ((payload as { role?: string }).role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
   }

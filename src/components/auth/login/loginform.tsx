@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '@/lib/validations/validation';
@@ -27,12 +27,12 @@ import { LoginFormData, loginSchema } from '@/lib/validations/validation';
 const LoginForm = ({
   onSubmit,
   loading,
+  error,
 }: {
   onSubmit: (data: LoginFormData) => void;
   loading: boolean;
+  error?: string;
 }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormData>({
@@ -42,17 +42,18 @@ const LoginForm = ({
       password: '',
     },
   });
+
   const handleSubmit = (formData: LoginFormData) => {
     onSubmit(formData);
   };
 
   const fillDemoCredentials = (type: 'admin' | 'user') => {
     if (type === 'admin') {
-      setEmail('admin@gmail.com');
-      setPassword('StrongUser#1');
+      form.setValue('email', 'admin@gmail.com');
+      form.setValue('password', 'StrongUser#1');
     } else {
-      setEmail('user@gmail.com');
-      setPassword('StrongUser#1');
+      form.setValue('email', 'user@gmail.com');
+      form.setValue('password', 'StrongUser#1');
     }
   };
   return (
@@ -148,15 +149,7 @@ const LoginForm = ({
                       <FormItem>
                         <Label>Email</Label>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your email"
-                            {...field}
-                            value={email}
-                            onChange={(e) => {
-                              setEmail(e.target.value);
-                              field.onChange(e);
-                            }}
-                          />
+                          <Input placeholder="Enter your email" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -175,11 +168,6 @@ const LoginForm = ({
                               placeholder="Enter your password"
                               type={showPassword ? 'text' : 'password'}
                               {...field}
-                              value={password}
-                              onChange={(e) => {
-                                setPassword(e.target.value);
-                                field.onChange(e);
-                              }}
                             />
                             <Button
                               type="button"
@@ -204,21 +192,37 @@ const LoginForm = ({
                   <Button
                     type="submit"
                     className="w-full h-12 btn-gradient font-semibold text-base"
+                    disabled={loading}
                   >
-                    Sign In
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      'Sign In'
+                    )}
                   </Button>
+
+                  {error && (
+                    <div className="rounded-md border border-destructive/30 bg-destructive/10 text-destructive px-3 py-2 text-sm">
+                      {error}
+                    </div>
+                  )}
                 </form>
 
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   <Button
                     variant="outline"
                     onClick={() => fillDemoCredentials('admin')}
+                    disabled={loading}
                   >
                     Admin Demo
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => fillDemoCredentials('user')}
+                    disabled={loading}
                   >
                     User Demo
                   </Button>

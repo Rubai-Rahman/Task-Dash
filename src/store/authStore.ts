@@ -17,33 +17,13 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
   updateProfile: (data: Partial<User>) => void;
+  checkAuth: () => Promise<void>;
 }
 
-// Mock users database
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'admin@gmail.com',
-    name: 'Sarah Johnson',
-    role: 'admin',
-    position: 'Product Manager',
-    joinedAt: '2023-01-15',
-    avatar:
-      'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face',
-  },
-  {
-    id: '2',
-    email: 'user@gmail.com',
-    name: 'Mike Chen',
-    role: 'user',
-    position: 'Frontend Developer',
-    joinedAt: '2023-03-22',
-    avatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-  },
-];
+// Mock users database - now handled by API route
+// const mockUsers: User[] = [...];
 
 export const useAuth = create<AuthState>()(
   persist(
@@ -52,25 +32,63 @@ export const useAuth = create<AuthState>()(
       isAuthenticated: false,
 
       login: async (email: string, password: string) => {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        try {
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include', // Important for cookies
+          });
 
-        const user = mockUsers.find((u) => u.email === email);
-        if (user && password === 'StrongUser#1') {
-          set({ user, isAuthenticated: true });
-          return true;
+          if (response.ok) {
+            const data = await response.json();
+            set({ user: data.user, isAuthenticated: true });
+            return true;
+          }
+          return false;
+        } catch (error) {
+          console.error('Login error:', error);
+          return false;
         }
-        return false;
       },
 
-      logout: () => {
-        set({ user: null, isAuthenticated: false });
+      logout: async () => {
+        try {
+          await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+          });
+        } catch (error) {
+          console.error('Logout error:', error);
+        } finally {
+          set({ user: null, isAuthenticated: false });
+        }
       },
 
       updateProfile: (data: Partial<User>) => {
         const { user } = get();
         if (user) {
           set({ user: { ...user, ...data } });
+        }
+      },
+
+      checkAuth: async () => {
+        try {
+          const response = await fetch('/api/auth/me', {
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            set({ user: data.user, isAuthenticated: true });
+          } else {
+            set({ user: null, isAuthenticated: false });
+          }
+        } catch (error) {
+          console.error('Auth check error:', error);
+          set({ user: null, isAuthenticated: false });
         }
       },
     }),

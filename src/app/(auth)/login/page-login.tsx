@@ -18,7 +18,8 @@ export default function LoginPage() {
     try {
       const success = await login(data.email, data.password);
       if (success) {
-        router.push('/dashboard');
+        // The Provider component will handle the redirect
+        // No need to manually redirect here
       } else {
         setError('Invalid email or password');
       }
@@ -28,13 +29,5 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    console.log('error', error);
-    return <div>{error}</div>;
-  }
-
-  return <LoginForm onSubmit={handleLogin} loading={isLoading} />;
+  return <LoginForm onSubmit={handleLogin} loading={isLoading} error={error} />;
 }
