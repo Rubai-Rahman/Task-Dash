@@ -22,8 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useDataStore, type Task } from '@/lib/data-store';
-import { useAuthStore } from '@/lib/auth-store';
+
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -33,6 +32,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { Task, useDataStore } from '@/lib/data/data-store';
+import { useAuth } from '@/store/authStore';
 
 interface TaskFormProps {
   task?: Task;
@@ -63,7 +64,7 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
   });
 
   const { addTask, updateTask } = useDataStore();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
