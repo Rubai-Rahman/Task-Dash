@@ -69,17 +69,6 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
     },
   ];
 
-  const adminCards = [
-    {
-      title: 'System Health',
-      value: '98.5',
-      suffix: '%',
-      icon: Shield,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-    },
-  ];
-
   if (isLoading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -129,42 +118,6 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
           </Card>
         );
       })}
-
-      <RoleGuard allowedRoles={['admin']}>
-        {adminCards.map((card, index) => {
-          const Icon = card.icon;
-          return (
-            <Card
-              key={`admin-${index}`}
-              className="hover:shadow-md transition-shadow border-purple-200"
-            >
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground flex items-center space-x-1">
-                  <span>{card.title}</span>
-                  <Badge
-                    variant="secondary"
-                    className="bg-purple-100 text-purple-800 text-xs"
-                  >
-                    Admin
-                  </Badge>
-                </CardTitle>
-                <div className={`p-2 rounded-lg ${card.bgColor}`}>
-                  <Icon className={`h-4 w-4 ${card.color}`} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {card.value}
-                  {card.suffix}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  System uptime
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </RoleGuard>
     </div>
   );
 }

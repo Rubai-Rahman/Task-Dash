@@ -1,14 +1,13 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import DashboardPageContent from './page-dashboard';
+
 export const metadata: Metadata = {
-  title: 'Task-Dash - Dashboard',
+  title: 'Dashboard - Admin - Chrono Click',
+  description: 'View store dashboard and performance metrics.',
 };
 
 const DashboardPage = () => {
-  return (
-    <div>
-      <h1>This is page</h1>
-    </div>
-  );
+  return <DashboardPageContent />;
 };
 
 export default DashboardPage;

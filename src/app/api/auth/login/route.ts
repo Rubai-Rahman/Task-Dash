@@ -6,13 +6,13 @@ import { COOKIE_NAME, JWT_SECRET } from '@/lib/session';
 const users = [
   {
     id: '1',
-    email: 'admin@taskflow.com',
+    email: 'admin@gmail.com',
     name: 'Sarah Johnson',
     role: 'admin' as const,
   },
   {
     id: '2',
-    email: 'user@taskflow.com',
+    email: 'user@gmail.com',
     name: 'Mike Chen',
     role: 'user' as const,
   },

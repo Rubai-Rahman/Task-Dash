@@ -23,26 +23,14 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '@/lib/validations/validation';
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { loginAction, type ActionState } from '@/app/(auth)/login/actions';
-import ErrorComponent from '@/components/main/erro-component';
 
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
-  return (
-    <Button
-      type="submit"
-      className="w-full h-12 btn-gradient font-semibold text-base"
-      disabled={pending}
-    >
-      {pending ? 'Signing in…' : 'Sign In'}
-    </Button>
-  );
-};
-
-const LoginForm = () => {
+const LoginForm = ({
+  onSubmit,
+  loading,
+}: {
+  onSubmit: (data: LoginFormData) => void;
+  loading: boolean;
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -54,26 +42,17 @@ const LoginForm = () => {
       password: '',
     },
   });
-
-  const [state, formAction] = useFormState<ActionState, FormData>(
-    loginAction,
-    {} as ActionState
-  );
-  const router = useRouter();
-
-  useEffect(() => {
-    if (state?.success) {
-      router.replace('/dashboard');
-    }
-  }, [state?.success, router]);
+  const handleSubmit = (formData: LoginFormData) => {
+    onSubmit(formData);
+  };
 
   const fillDemoCredentials = (type: 'admin' | 'user') => {
     if (type === 'admin') {
-      setEmail('admin@taskflow.com');
-      setPassword('demo123');
+      setEmail('admin@gmail.com');
+      setPassword('StrongAdmin#1');
     } else {
-      setEmail('user@taskflow.com');
-      setPassword('demo123');
+      setEmail('user@gmail.com');
+      setPassword('StrongUser#1');
     }
   };
   return (
@@ -158,7 +137,10 @@ const LoginForm = () => {
 
             <CardContent>
               <Form {...form}>
-                <form action={formAction} className="space-y-5">
+                <form
+                  className="space-y-5"
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                >
                   <FormField
                     control={form.control}
                     name="email"
@@ -219,9 +201,12 @@ const LoginForm = () => {
                     )}
                   />
 
-                  <SubmitButton />
-
-                  <ErrorComponent message={state?.error} />
+                  <Button
+                    type="submit"
+                    className="w-full h-12 btn-gradient font-semibold text-base"
+                  >
+                    Sign In
+                  </Button>
                 </form>
 
                 <div className="mt-4 grid grid-cols-2 gap-3">
