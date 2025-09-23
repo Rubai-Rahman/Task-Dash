@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useAuth } from '@/store/authStore';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
-export default function Provider({ children }: { children: React.ReactNode }) {
+function AuthProvider({ children }: { children: React.ReactNode }) {
   const { checkAuth, isAuthenticated } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,4 +28,12 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, router, searchParams, pathname]);
 
   return <>{children}</>;
+}
+
+export default function Provider({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense>
+      <AuthProvider>{children}</AuthProvider>
+    </Suspense>
+  );
 }

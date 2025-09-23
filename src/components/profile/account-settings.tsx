@@ -33,9 +33,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Loader2, Shield, Bell, Palette, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function AccountSettings() {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [settings, setSettings] = useState({
     emailNotifications: true,
@@ -56,16 +56,9 @@ export function AccountSettings() {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast({
-        title: 'Settings updated',
-        description: 'Your account settings have been saved.',
-      });
+      toast('Your account settings have been saved.');
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to update settings. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error('Failed to update settings. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -74,11 +67,7 @@ export function AccountSettings() {
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast({
-        title: 'Error',
-        description: 'New passwords do not match.',
-        variant: 'destructive',
-      });
+      toast.error('New passwords do not match.');
       return;
     }
 
@@ -86,21 +75,14 @@ export function AccountSettings() {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast({
-        title: 'Password updated',
-        description: 'Your password has been successfully changed.',
-      });
+      toast.success('Your password has been successfully changed.');
       setPasswordData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
       });
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to update password. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error('Failed to update password. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -108,11 +90,7 @@ export function AccountSettings() {
 
   const handleAccountDeletion = async () => {
     // This would typically redirect to login after account deletion
-    toast({
-      title: 'Account deletion requested',
-      description: 'Your account deletion request has been submitted.',
-      variant: 'destructive',
-    });
+    toast.success('Your account deletion request has been submitted.');
   };
 
   return (

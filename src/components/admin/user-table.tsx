@@ -1,12 +1,24 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Input } from "@/components/ui/input"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useState } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,58 +28,71 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { MoreHorizontal, Edit, Trash2, Search, Plus, Users, Shield } from "lucide-react"
-import { format } from "date-fns"
-import type { User } from "@/lib/auth-store"
-import { useUserStore } from "@/lib/user-store"
-import { useAuthStore } from "@/lib/auth-store"
+} from '@/components/ui/alert-dialog';
+import {
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  Search,
+  Plus,
+  Users,
+  Shield,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import type { User } from '@/store/authStore';
+import { useUserStore } from '@/lib/data/user-store';
+import { useAuth } from '@/store/authStore';
 
 interface UserTableProps {
-  users: User[]
-  onEditUser: (user: User) => void
-  onCreateUser: () => void
-  isLoading: boolean
+  users: User[];
+  onEditUser: (user: User) => void;
+  onCreateUser: () => void;
+  isLoading: boolean;
 }
 
-export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTableProps) {
-  const [deleteUserId, setDeleteUserId] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
-  const { deleteUser } = useUserStore()
-  const { user: currentUser } = useAuthStore()
+export function UserTable({
+  users,
+  onEditUser,
+  onCreateUser,
+  isLoading,
+}: UserTableProps) {
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { deleteUser } = useUserStore();
+  const { user: currentUser } = useAuth();
 
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleDeleteUser = (userId: string) => {
-    deleteUser(userId)
-    setDeleteUserId(null)
-  }
+    deleteUser(userId);
+    setDeleteUserId(null);
+  };
 
-  const getRoleColor = (role: User["role"]) => {
+  const getRoleColor = (role: User['role']) => {
     switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-800 hover:bg-purple-200"
-      case "user":
-        return "bg-blue-100 text-blue-800 hover:bg-blue-200"
+      case 'admin':
+        return 'bg-purple-100 text-purple-800 hover:bg-purple-200';
+      case 'user':
+        return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
       default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200"
+        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
     }
-  }
+  };
 
-  const getRoleIcon = (role: User["role"]) => {
+  const getRoleIcon = (role: User['role']) => {
     switch (role) {
-      case "admin":
-        return <Shield className="h-3 w-3" />
-      case "user":
-        return <Users className="h-3 w-3" />
+      case 'admin':
+        return <Shield className="h-3 w-3" />;
+      case 'user':
+        return <Users className="h-3 w-3" />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -114,7 +139,7 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
           </Table>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -167,22 +192,29 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
                     <TableCell>
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                          <AvatarImage
+                            src={user.avatar || '/placeholder.svg'}
+                          />
                           <AvatarFallback>
                             {user.name
-                              .split(" ")
+                              .split(' ')
                               .map((n) => n[0])
-                              .join("")}
+                              .join('')}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <div className="font-medium">{user.name}</div>
-                          <div className="text-sm text-muted-foreground">{user.email}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {user.email}
+                          </div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className={getRoleColor(user.role)}>
+                      <Badge
+                        variant="secondary"
+                        className={getRoleColor(user.role)}
+                      >
                         <div className="flex items-center space-x-1">
                           {getRoleIcon(user.role)}
                           <span className="capitalize">{user.role}</span>
@@ -190,7 +222,12 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">{format(new Date(user.createdAt), "MMM dd, yyyy")}</div>
+                      <div className="text-sm">
+                        {format(
+                          new Date(user.createdAt || user.joinedAt),
+                          'MMM dd, yyyy'
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
@@ -205,7 +242,10 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
                             Edit
                           </DropdownMenuItem>
                           {user.id !== currentUser?.id && (
-                            <DropdownMenuItem onClick={() => setDeleteUserId(user.id)} className="text-destructive">
+                            <DropdownMenuItem
+                              onClick={() => setDeleteUserId(user.id)}
+                              className="text-destructive"
+                            >
                               <Trash2 className="mr-2 h-4 w-4" />
                               Delete
                             </DropdownMenuItem>
@@ -221,13 +261,16 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
         </div>
       </div>
 
-      <AlertDialog open={!!deleteUserId} onOpenChange={() => setDeleteUserId(null)}>
+      <AlertDialog
+        open={!!deleteUserId}
+        onOpenChange={() => setDeleteUserId(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete User</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this user? This action cannot be undone and will remove all associated
-              data.
+              Are you sure you want to delete this user? This action cannot be
+              undone and will remove all associated data.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -242,5 +285,5 @@ export function UserTable({ users, onEditUser, onCreateUser, isLoading }: UserTa
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }

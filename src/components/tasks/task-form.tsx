@@ -1,8 +1,10 @@
 'use client';
 
-import type React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { toast } from 'sonner';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,6 +37,17 @@ import { cn } from '@/lib/utils';
 import { Task, useDataStore } from '@/lib/data/data-store';
 import { useAuth } from '@/store/authStore';
 
+const taskSchema = z.object({
+  title: z.string().min(3, 'Title must be at least 3 characters'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+  dueDate: z.string().min(1, 'Due date is required'),
+  priority: z.enum(['low', 'medium', 'high']),
+  assignedTo: z.string().optional(),
+  status: z.enum(['todo', 'in-progress', 'completed']),
+});
+
+type TaskFormData = z.infer<typeof taskSchema>;
+
 interface TaskFormProps {
   task?: Task;
   open: boolean;
@@ -53,51 +66,44 @@ const teamMembers = [
 ];
 
 export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    title: task?.title || '',
-    description: task?.description || '',
-    status: task?.status || ('todo' as Task['status']),
-    priority: task?.priority || ('medium' as Task['priority']),
-    assignedTo: task?.assignedTo || '',
-    dueDate: task?.dueDate ? new Date(task.dueDate) : undefined,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
+    defaultValues: {
+      title: task?.title || '',
+      description: task?.description || '',
+      status: task?.status || 'todo',
+      priority: task?.priority || 'medium',
+      assignedTo: task?.assignedTo || '',
+      dueDate: task?.dueDate || '',
+    },
   });
 
   const { addTask, updateTask } = useDataStore();
   const { user } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  // Watch values for the form fields
+  const watchedDueDate = watch('dueDate');
 
+  const onSubmitHandler = async (data: TaskFormData) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const taskData = {
-        ...formData,
-        dueDate: formData.dueDate?.toISOString(),
-      };
-
       if (task) {
-        updateTask(task.id, taskData);
+        await updateTask(task.id, data);
       } else {
-        addTask(taskData);
+        await addTask({ ...data, assignedTo: data.assignedTo ?? '' });
       }
 
       onOpenChange(false);
-      setFormData({
-        title: '',
-        description: '',
-        status: 'todo',
-        priority: 'medium',
-        assignedTo: '',
-        dueDate: undefined,
-      });
+      toast.success(
+        task ? 'Task updated successfully' : 'Task created successfully'
+      );
     } catch (error) {
-      console.error('Error saving task:', error);
-    } finally {
-      setIsLoading(false);
+      toast.error(`Failed to ${task ? 'update' : 'create'} task`);
     }
   };
 
@@ -120,40 +126,42 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
             )}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmitHandler)} className="space-y-4">
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
+                {...register('title')}
                 placeholder="Enter task title"
                 required
               />
+              {errors.title && (
+                <p className="text-sm text-red-600">{errors.title.message}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
+                {...register('description')}
                 placeholder="Enter task description"
                 rows={3}
               />
+              {errors.description && (
+                <p className="text-sm text-red-600">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
-                  value={formData.status}
-                  onValueChange={(value: Task['status']) =>
-                    setFormData({ ...formData, status: value })
+                  onValueChange={(value) =>
+                    setValue('status', value as Task['status'])
                   }
+                  defaultValue={watch('status')}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
@@ -165,13 +173,14 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="grid gap-2">
                 <Label htmlFor="priority">Priority</Label>
                 <Select
-                  value={formData.priority}
-                  onValueChange={(value: Task['priority']) =>
-                    setFormData({ ...formData, priority: value })
+                  onValueChange={(value) =>
+                    setValue('priority', value as Task['priority'])
                   }
+                  defaultValue={watch('priority')}
                   disabled={!canEditAllFields}
                 >
                   <SelectTrigger>
@@ -185,13 +194,12 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
                 </Select>
               </div>
             </div>
+
             <div className="grid gap-2">
               <Label htmlFor="assignedTo">Assigned To</Label>
               <Select
-                value={formData.assignedTo}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, assignedTo: value })
-                }
+                onValueChange={(value) => setValue('assignedTo', value)}
+                defaultValue={watch('assignedTo')}
                 disabled={!canAssignTasks}
               >
                 <SelectTrigger>
@@ -211,6 +219,7 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
                 </p>
               )}
             </div>
+
             <div className="grid gap-2">
               <Label>Due Date</Label>
               <Popover>
@@ -219,28 +228,34 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
                     variant="outline"
                     className={cn(
                       'justify-start text-left font-normal',
-                      !formData.dueDate && 'text-muted-foreground'
+                      !watchedDueDate && 'text-muted-foreground'
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.dueDate
-                      ? format(formData.dueDate, 'PPP')
+                    {watchedDueDate
+                      ? format(new Date(watchedDueDate), 'PPP')
                       : 'Pick a date'}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={formData.dueDate}
+                    selected={
+                      watchedDueDate ? new Date(watchedDueDate) : undefined
+                    }
                     onSelect={(date) =>
-                      setFormData({ ...formData, dueDate: date })
+                      setValue('dueDate', date ? date.toISOString() : '')
                     }
                     initialFocus
                   />
                 </PopoverContent>
               </Popover>
+              {errors.dueDate && (
+                <p className="text-sm text-red-600">{errors.dueDate.message}</p>
+              )}
             </div>
           </div>
+
           <DialogFooter>
             <Button
               type="button"
@@ -249,8 +264,10 @@ export function TaskForm({ task, open, onOpenChange }: TaskFormProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               {task ? 'Update Task' : 'Create Task'}
             </Button>
           </DialogFooter>

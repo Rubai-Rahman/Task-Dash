@@ -22,9 +22,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUserStore } from '@/lib/user-store';
-import type { User } from '@/lib/auth-store';
+
 import { Loader2, Upload } from 'lucide-react';
+import { User } from '@/store/authStore';
+import { useUserStore } from '@/lib/data/user-store';
 
 interface UserFormProps {
   user?: User;
@@ -39,6 +40,7 @@ export function UserForm({ user, open, onOpenChange }: UserFormProps) {
     email: user?.email || '',
     role: user?.role || ('user' as User['role']),
     avatar: user?.avatar || '',
+    joinedAt: user?.joinedAt || new Date().toISOString(),
   });
 
   const { addUser, updateUser } = useUserStore();
@@ -63,6 +65,7 @@ export function UserForm({ user, open, onOpenChange }: UserFormProps) {
         email: '',
         role: 'user',
         avatar: '',
+        joinedAt: new Date().toISOString(),
       });
     } catch (error) {
       console.error('Error saving user:', error);

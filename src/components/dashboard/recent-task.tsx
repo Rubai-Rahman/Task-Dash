@@ -10,6 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Clock, User } from 'lucide-react';
+import { Task } from '@/types/task';
 
 interface RecentTasksProps {
   tasks: Task[];

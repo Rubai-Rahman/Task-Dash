@@ -1,8 +1,8 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { User } from '@/store/authStore';
 import { Users, Shield, UserCheck, Clock } from 'lucide-react';
-import type { User } from '@/lib/auth-store';
 
 interface UserStatsProps {
   users: User[];
@@ -14,10 +14,10 @@ export function UserStats({ users, isLoading }: UserStatsProps) {
   const adminUsers = users.filter((u) => u.role === 'admin').length;
   const regularUsers = users.filter((u) => u.role === 'user').length;
   const recentUsers = users.filter((u) => {
-    const createdAt = new Date(u.createdAt);
+    const date = new Date(u.createdAt || u.joinedAt);
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return createdAt > thirtyDaysAgo;
+    return date > thirtyDaysAgo;
   }).length;
 
   const stats = [

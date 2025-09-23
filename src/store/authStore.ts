@@ -11,6 +11,7 @@ export interface User {
   avatar?: string;
   position?: string;
   joinedAt: string;
+  createdAt?: string | Date;
 }
 
 interface AuthState {
@@ -21,9 +22,6 @@ interface AuthState {
   updateProfile: (data: Partial<User>) => void;
   checkAuth: () => Promise<void>;
 }
-
-// Mock users database - now handled by API route
-// const mockUsers: User[] = [...];
 
 export const useAuth = create<AuthState>()(
   persist(

@@ -11,6 +11,7 @@ import {
   FolderKanban,
   LogOut,
 } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   Sidebar,
@@ -43,6 +44,12 @@ const navigationItems = [
     icon: FolderKanban,
     roles: ['admin', 'user'],
   },
+  {
+    title: 'Profile',
+    url: '/profile',
+    icon: Users,
+    roles: ['admin', 'user'],
+  },
 
   {
     title: 'Team',
@@ -62,6 +69,9 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const router = useRouter();
+
+  // Add state for collapse
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const handleLogout = async () => {
     await logout();
     router.replace('/login');
@@ -81,19 +91,23 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {/* Logo Section */}
+        {/* Updated Logo Section */}
         <div className="p-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-sm" />
+            <div className="min-w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <div className="size-4 bg-white rounded-sm" />
             </div>
-            <h1 className="text-xl font-bold gradient-text">TaskFlow</h1>
+            {!isCollapsed && (
+              <h1 className="text-xl font-bold gradient-text">Task-Dash</h1>
+            )}
           </div>
         </div>
 
-        {/* Main Navigation */}
+        {/* Updated Navigation Items */}
         <SidebarGroup>
-          <SidebarGroupLabel>Main Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            {!isCollapsed && 'Main Navigation'}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {filteredItems.map((item) => (
@@ -101,7 +115,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link href={item.url} className={getNavCls(item.url)}>
                       <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                      {!isCollapsed && <span>{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -131,8 +145,8 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton onClick={handleLogout} className="w-full">
-            <LogOut className="h-4 w-4" />
+          <SidebarMenuButton onClick={handleLogout} className="w-full mb-3">
+            <LogOut className="size-4" />
             <span>Sign out</span>
           </SidebarMenuButton>
         </SidebarMenuItem>

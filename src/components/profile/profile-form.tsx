@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,14 +15,33 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { useAuthStore } from '@/lib/auth-store';
-import { Loader2, Upload, User, Mail, Calendar, Shield } from 'lucide-react';
+import {
+  Loader2,
+  User,
+  Mail,
+  Calendar,
+  Shield,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  Users,
+  BarChart,
+} from 'lucide-react';
 import { format } from 'date-fns';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/store/authStore';
+import { toast } from 'sonner';
+
+const formatJoinDate = (date: string | Date | undefined) => {
+  if (!date) return 'Unknown';
+
+  const joinDate = new Date(date);
+  if (isNaN(joinDate.getTime())) return 'Invalid date';
+
+  return format(joinDate, 'MMMM yyyy');
+};
 
 export function ProfileForm() {
-  const { user, updateProfile } = useAuthStore();
-  const { toast } = useToast();
+  const { user, updateProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -31,6 +49,22 @@ export function ProfileForm() {
     bio: '',
     avatar: user?.avatar || '',
   });
+
+  // Mock data for dashboard stats
+  const adminStats = {
+    totalUsers: 156,
+    totalTasks: 487,
+    completedTasks: 324,
+    pendingTasks: 163,
+    activeUsers: 89,
+  };
+
+  const userStats = {
+    assignedTasks: 12,
+    completedTasks: 8,
+    pendingTasks: 4,
+    upcomingDeadlines: 3,
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,16 +75,9 @@ export function ProfileForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       updateProfile(formData);
-      toast({
-        title: 'Profile updated',
-        description: 'Your profile has been successfully updated.',
-      });
+      toast.success('Profile updated');
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to update profile. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error(`Failed to update profile: ${error}`);
     } finally {
       setIsLoading(false);
     }
@@ -71,72 +98,143 @@ export function ProfileForm() {
 
   return (
     <div className="space-y-6">
-      {/* Profile Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile Overview</CardTitle>
-          <CardDescription>
-            Your account information and current status
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-start space-x-6">
-            <div className="relative">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src={user.avatar || '/placeholder.svg'} />
-                <AvatarFallback className="text-2xl">
-                  {user.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
-                </AvatarFallback>
-              </Avatar>
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0 bg-transparent"
-              >
-                <Upload className="h-3 w-3" />
-              </Button>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-purple-500 to-blue-600 rounded-lg p-6 text-white">
+        <div className="flex items-center space-x-6">
+          <Avatar className="h-32 w-32 ring-4 ring-white/30">
+            <AvatarImage src={user.avatar || '/placeholder.svg'} />
+            <AvatarFallback className="text-4xl">
+              {user.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h1 className="text-3xl font-bold">{user.name}</h1>
+            <div className="flex items-center space-x-2 mt-2">
+              <Mail className="h-4 w-4" />
+              <span>{user.email}</span>
             </div>
-            <div className="flex-1 space-y-3">
-              <div>
-                <h3 className="text-xl font-semibold">{user.name}</h3>
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <Mail className="h-4 w-4" />
-                  <span>{user.email}</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Badge
-                  variant="secondary"
-                  className={
-                    user.role === 'admin'
-                      ? 'bg-purple-100 text-purple-800'
-                      : 'bg-blue-100 text-blue-800'
-                  }
-                >
-                  <div className="flex items-center space-x-1">
-                    {user.role === 'admin' && <Shield className="h-3 w-3" />}
-                    <span className="capitalize">{user.role}</span>
-                  </div>
-                </Badge>
-                <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                  <Calendar className="h-3 w-3" />
-                  <span>
-                    Joined {format(new Date(user.createdAt), 'MMMM yyyy')}
-                  </span>
-                </div>
-              </div>
+            <div className="flex items-center space-x-4 mt-4">
+              <Badge className="bg-white/20 hover:bg-white/30">
+                <Shield className="h-3 w-3 mr-1" />
+                <span className="capitalize">{user.role}</span>
+              </Badge>
+              <span className="text-sm opacity-80">
+                <Calendar className="h-3 w-3 inline mr-1" />
+                Joined {formatJoinDate(user.joinedAt)}
+              </span>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Edit Profile */}
-      <Card>
+      {/* Dashboard Stats */}
+      {user.role === 'admin' ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="bg-gradient-to-br from-green-50 to-green-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-green-600">
+                    Total Users
+                  </p>
+                  <h3 className="text-2xl font-bold text-green-700">
+                    {adminStats.totalUsers}
+                  </h3>
+                </div>
+                <Users className="h-8 w-8 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-600">
+                    Total Tasks
+                  </p>
+                  <h3 className="text-2xl font-bold text-blue-700">
+                    {adminStats.totalTasks}
+                  </h3>
+                </div>
+                <BarChart className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-purple-600">
+                    Active Users
+                  </p>
+                  <h3 className="text-2xl font-bold text-purple-700">
+                    {adminStats.activeUsers}
+                  </h3>
+                </div>
+                <User className="h-8 w-8 text-purple-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-600">
+                    Assigned Tasks
+                  </p>
+                  <h3 className="text-2xl font-bold text-blue-700">
+                    {userStats.assignedTasks}
+                  </h3>
+                </div>
+                <Clock className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-50 to-green-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-green-600">
+                    Completed
+                  </p>
+                  <h3 className="text-2xl font-bold text-green-700">
+                    {userStats.completedTasks}
+                  </h3>
+                </div>
+                <CheckCircle2 className="h-8 w-8 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-yellow-600">Pending</p>
+                  <h3 className="text-2xl font-bold text-yellow-700">
+                    {userStats.pendingTasks}
+                  </h3>
+                </div>
+                <AlertCircle className="h-8 w-8 text-yellow-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Edit Profile Section */}
+      <Card className="border-t-4 border-t-blue-500">
         <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
+          <CardTitle className="text-2xl">Edit Profile</CardTitle>
           <CardDescription>
             Update your personal information and preferences
           </CardDescription>

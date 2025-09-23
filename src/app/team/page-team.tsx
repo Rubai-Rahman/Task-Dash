@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Users, Mail, Calendar, Shield } from 'lucide-react';
-import { format } from 'date-fns';
+import { formatDate } from '@/lib/utils/date';
 import { useUserStore } from '@/lib/data/user-store';
 
 export default function TeamPageContent() {
@@ -95,7 +95,7 @@ export default function TeamPageContent() {
               <div className="flex items-center justify-center space-x-1 text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3" />
                 <span>
-                  Joined {format(new Date(user.createdAt), 'MMM yyyy')}
+                  Joined {formatDate(user.createdAt)}
                 </span>
               </div>
             </CardContent>

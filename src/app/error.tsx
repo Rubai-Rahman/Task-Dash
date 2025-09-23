@@ -1,11 +1,18 @@
 'use client';
 
-const Error = () => {
-  return (
-    <div>
-      <h1>This is Error</h1>
-    </div>
-  );
-};
+import ErrorState from '@/components/main/error-state';
 
-export default Error;
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <ErrorState
+      message={error?.message || 'Unexpected error'}
+      onRetry={reset}
+    />
+  );
+}

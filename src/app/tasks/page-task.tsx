@@ -41,8 +41,8 @@ export default function TasksPageContent() {
 
     // Sort tasks
     filtered.sort((a, b) => {
-      let aValue: any = a[sortBy as keyof Task];
-      let bValue: any = b[sortBy as keyof Task];
+      let aValue: unknown = a[sortBy as keyof Task];
+      let bValue: unknown = b[sortBy as keyof Task];
 
       if (sortBy === 'priority') {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
@@ -53,14 +53,14 @@ export default function TasksPageContent() {
         sortBy === 'updatedAt' ||
         sortBy === 'dueDate'
       ) {
-        aValue = new Date(aValue || 0).getTime();
-        bValue = new Date(bValue || 0).getTime();
+        aValue = new Date(aValue as string || 0).getTime();
+        bValue = new Date(bValue as string || 0).getTime();
       }
 
       if (sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1;
+        return (aValue as number) > (bValue as number) ? 1 : -1;
       } else {
-        return aValue < bValue ? 1 : -1;
+        return (aValue as number) < (bValue as number) ? 1 : -1;
       }
     });
 
