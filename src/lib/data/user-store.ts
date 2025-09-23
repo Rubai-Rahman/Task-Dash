@@ -1,5 +1,5 @@
+import { User } from '@/store/authStore';
 import { create } from 'zustand';
-import type { User } from './auth-store';
 
 interface UserManagementState {
   users: User[];
@@ -14,67 +14,75 @@ interface UserManagementState {
 const mockUsers: User[] = [
   {
     id: '1',
-    email: 'admin@taskflow.com',
+    email: 'admin@gmail.com',
     name: 'Admin User',
     role: 'admin',
     avatar: '/admin-avatar.png',
-    createdAt: '2024-01-01T00:00:00Z',
+    position: 'Product Manager',
+    joinedAt: '2024-01-01T00:00:00Z',
   },
   {
     id: '2',
-    email: 'user@taskflow.com',
+    email: 'user@gmail.com',
     name: 'John Doe',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-15T00:00:00Z',
+    position: 'Frontend Developer',
+    joinedAt: '2024-01-15T00:00:00Z',
   },
   {
     id: '3',
-    email: 'jane.smith@taskflow.com',
+    email: 'jane.smith@gmail.com',
     name: 'Jane Smith',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-10T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-10T00:00:00Z',
   },
   {
     id: '4',
-    email: 'mike.johnson@taskflow.com',
+    email: 'mike.johnson@gmail.com',
     name: 'Mike Johnson',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-12T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-12T00:00:00Z',
   },
   {
     id: '5',
-    email: 'sarah.wilson@taskflow.com',
+    email: 'sarah.wilson@gmail.com',
     name: 'Sarah Wilson',
     role: 'admin',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-08T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-08T00:00:00Z',
   },
   {
     id: '6',
-    email: 'tom.brown@taskflow.com',
+    email: 'tom.brown@gmail.com',
     name: 'Tom Brown',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-18T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-18T00:00:00Z',
   },
   {
     id: '7',
-    email: 'lisa.davis@taskflow.com',
+    email: 'lisa.davis@gmail.com',
     name: 'Lisa Davis',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-14T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-14T00:00:00Z',
   },
   {
     id: '8',
-    email: 'alex.chen@taskflow.com',
+    email: 'alex.chen@gmail.com',
     name: 'Alex Chen',
     role: 'user',
     avatar: '/diverse-user-avatars.png',
-    createdAt: '2024-01-16T00:00:00Z',
+    position: 'Backend Developer',
+    joinedAt: '2024-01-16T00:00:00Z',
   },
 ];
 
@@ -96,7 +104,7 @@ export const useUserStore = create<UserManagementState>((set, get) => ({
     const newUser: User = {
       ...userData,
       id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
+      joinedAt: new Date().toISOString(),
     };
     set((state) => ({ users: [...state.users, newUser] }));
   },

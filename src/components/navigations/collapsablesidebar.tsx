@@ -9,6 +9,7 @@ import {
   BarChart3,
   Settings,
   FolderKanban,
+  LogOut,
 } from 'lucide-react';
 
 import {
@@ -59,8 +60,10 @@ const navigationItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
-
+  const { user, logout } = useAuth();
+  const handleLogout = () => {
+    logout();
+  };
   const getNavCls = (path: string) => {
     const isActive = pathname === path;
     return isActive
@@ -124,6 +127,14 @@ export function AppSidebar() {
           </SidebarGroup>
         )}
       </SidebarContent>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton onClick={handleLogout} className="w-full">
+            <LogOut className="h-4 w-4" />
+            <span>Sign out</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
     </Sidebar>
   );
 }

@@ -25,7 +25,7 @@ interface AuthState {
 const mockUsers: User[] = [
   {
     id: '1',
-    email: 'admin@taskflow.com',
+    email: 'admin@gmail.com',
     name: 'Sarah Johnson',
     role: 'admin',
     position: 'Product Manager',
@@ -35,7 +35,7 @@ const mockUsers: User[] = [
   },
   {
     id: '2',
-    email: 'user@taskflow.com',
+    email: 'user@gmail.com',
     name: 'Mike Chen',
     role: 'user',
     position: 'Frontend Developer',
@@ -56,7 +56,7 @@ export const useAuth = create<AuthState>()(
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const user = mockUsers.find((u) => u.email === email);
-        if (user && password === 'demo123') {
+        if (user && password === 'StrongUser#1') {
           set({ user, isAuthenticated: true });
           return true;
         }

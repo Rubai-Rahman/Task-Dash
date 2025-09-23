@@ -49,7 +49,7 @@ const LoginForm = ({
   const fillDemoCredentials = (type: 'admin' | 'user') => {
     if (type === 'admin') {
       setEmail('admin@gmail.com');
-      setPassword('StrongAdmin#1');
+      setPassword('StrongUser#1');
     } else {
       setEmail('user@gmail.com');
       setPassword('StrongUser#1');
