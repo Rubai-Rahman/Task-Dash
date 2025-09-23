@@ -8,7 +8,6 @@ import {
   Users,
   BarChart3,
   Settings,
-  Calendar,
   FolderKanban,
 } from 'lucide-react';
 
@@ -43,12 +42,7 @@ const navigationItems = [
     icon: FolderKanban,
     roles: ['admin', 'user'],
   },
-  {
-    title: 'Calendar',
-    url: '/calendar',
-    icon: Calendar,
-    roles: ['admin', 'user'],
-  },
+
   {
     title: 'Team',
     url: '/team',
