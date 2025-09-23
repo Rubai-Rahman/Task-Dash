@@ -92,7 +92,8 @@ export const useAuth = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage), // Use sessionStorage instead of localStorage
+      partialize: (state) => ({ user: state.user }), // Only persist user data, not methods
     }
   )
 );

@@ -19,24 +19,28 @@ export function DashboardLayout({
   title,
   description,
 }: DashboardLayoutProps) {
-  const { user, isAuthenticated } = useAuth();
-
   useEffect(() => {
     const checkAuth = async () => {
-      if (!isAuthenticated) {
-        try {
-          const response = await fetch('/api/auth/me');
-          if (response.ok) {
-            const { user } = await response.json();
-            useAuth.setState({ user, isAuthenticated: true });
-          }
-        } catch (error) {
-          console.error('Auth check failed:', error);
+      try {
+        const response = await fetch('/api/auth/me');
+        if (!response.ok) {
+          // If not authenticated, redirect to login
+          window.location.href = `/login?next=${encodeURIComponent(
+            window.location.pathname
+          )}`;
+          return;
         }
+        const { user } = await response.json();
+        useAuth.setState({ user, isAuthenticated: true });
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        window.location.href = `/login?next=${encodeURIComponent(
+          window.location.pathname
+        )}`;
       }
     };
     checkAuth();
-  }, [isAuthenticated]);
+  }, []);
 
   return (
     <SidebarProvider>

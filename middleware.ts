@@ -5,16 +5,17 @@ import { COOKIE_NAME, JWT_SECRET } from '@/lib/session';
 const PUBLIC_PATHS = [
   '/',
   '/login',
+  '/signup',
   '/api/auth/login',
   '/api/auth/logout',
-  '/api/auth/me',
   '/_next',
   '/favicon.ico',
 ];
 
 function isPublicPath(pathname: string): boolean {
-  return PUBLIC_PATHS.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`)
+  return (
+    PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`)) ||
+    !!pathname.match(/\.(ico|png|jpg|jpeg|svg|css|js|json)$/)
   );
 }
 
@@ -50,5 +51,10 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$).*)'],
+  matcher: [
+    /*
+     * Match all paths except public ones
+     */
+    '/((?!api/auth/login|api/auth/logout|login|signup|_next/static|_next/image|favicon.ico|public).*)',
+  ],
 };
