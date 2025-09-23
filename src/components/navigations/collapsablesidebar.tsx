@@ -71,7 +71,7 @@ export function AppSidebar() {
   const router = useRouter();
 
   // Add state for collapse
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed] = useState(false);
   const handleLogout = async () => {
     await logout();
     router.replace('/login');
@@ -92,7 +92,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         {/* Updated Logo Section */}
-        <div className="p-4">
+        <div className="p-2">
           <div className="flex items-center gap-3">
             <div className="min-w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <div className="size-4 bg-white rounded-sm" />
