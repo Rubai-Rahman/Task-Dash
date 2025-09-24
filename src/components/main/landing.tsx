@@ -148,7 +148,7 @@ export function LandingPage() {
                 <Link href="/login">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto glow hover-scale"
+                    className="w-full sm:w-auto glow hover:scale-105 transition-all"
                   >
                     Start Free Trial
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -174,8 +174,8 @@ export function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="relative animate-scale-in">
-              <div className="glass rounded-2xl p-8 hover-scale">
+            <div className="relative ">
+              <div className="glass rounded-2xl p-8 hover:scale-105 transition-all">
                 <Image
                   src="/hero-dashboard.jpg"
                   alt="Dashboard Mockup"
@@ -184,8 +184,8 @@ export function LandingPage() {
                   className="rounded-lg shadow-lg"
                 />
               </div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-primary rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-secondary rounded-full opacity-30 animate-pulse"></div>
+              <div className="absolute -bottom-6 -right-6 size-24 bg-gradient-primary rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute -top-6 -left-6 size-16 bg-gradient-secondary rounded-full opacity-30 animate-pulse"></div>
             </div>
           </div>
         </div>

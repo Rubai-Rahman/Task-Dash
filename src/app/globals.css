@@ -42,6 +42,8 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --gradient-primary: var(--gradient-primary);
+  --gradient-secondary: var(--gradient-secondary);
+  --gradient-card: var(--gradient-card);
   --chart-1: var(--chart-1);
   --chart-2: var(--chart-2);
   --chart-3: var(--chart-3);
@@ -53,6 +55,8 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --transition-smooth: var(--transition-smooth);
+  --transition-bounce: var(--transition-bounce);
 }
 
 :root {
@@ -141,40 +145,6 @@
   --chart-4: 262 85% 60%; /* purple */
   --chart-5: 0 84% 60%; /* red */
 }
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  /* Chart palette (dark) - HSL triplets for hsl(var(--chart-x)) */
-  --chart-1: 217 91% 60%;
-  --chart-2: 142 70% 45%;
-  --chart-3: 20 92% 58%;
-  --chart-4: 262 90% 68%;
-  --chart-5: 0 84% 63%;
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
 
 @layer base {
   * {
@@ -188,7 +158,17 @@
 @utility bg-gradient-primary {
   background-image: var(--gradient-primary);
 }
-
+@utility bg-gradient-secondary {
+  background-image: var(--gradient-secondary);
+}
+@utility bg-gradient-card {
+  background-image: var(--gradient-card);
+}
+@utility glass {
+  background-color: oklch(from var(--card-glass) l c h / 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(from var(--border) l c h / 0.2);
+}
 /* Gradient text */
 .gradient-text {
   background: var(--gradient-primary);
