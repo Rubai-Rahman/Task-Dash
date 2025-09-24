@@ -176,15 +176,13 @@ export function LandingPage() {
             </div>
             <div className="relative animate-scale-in">
               <div className="glass rounded-2xl p-8 hover-scale">
-                
-                  <Image
-                    src="/hero-dashboard.jpg"
-                    alt="Dashboard Mockup"
-                    width={600}
-                    height={400}
-                    className="rounded-lg shadow-lg"
-                  />
-                
+                <Image
+                  src="/hero-dashboard.jpg"
+                  alt="Dashboard Mockup"
+                  width={600}
+                  height={400}
+                  className="rounded-lg shadow-lg"
+                />
               </div>
               <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-primary rounded-full opacity-20 animate-pulse"></div>
               <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-secondary rounded-full opacity-30 animate-pulse"></div>

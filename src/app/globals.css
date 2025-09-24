@@ -47,6 +47,12 @@
   --chart-3: var(--chart-3);
   --chart-4: var(--chart-4);
   --chart-5: var(--chart-5);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 :root {
@@ -64,9 +70,9 @@
   --popover-foreground: oklch(0.98 0 0);
 
   /* Brand colors - Modern purple-blue gradient */
-  --primary: oklch(0.66 0.25 280);
+  --primary: oklch(0.5 0.2417 281.95);
   --primary-foreground: oklch(0.98 0 0);
-  --primary-glow: oklch(0.72 0.26 290);
+  --primary-glow: oklch(0.63 0.2172 290.87);
 
   /* Secondary system */
   --secondary: oklch(0.27 0.01 270);
@@ -181,4 +187,12 @@
 
 @utility bg-gradient-primary {
   background-image: var(--gradient-primary);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
