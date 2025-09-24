@@ -214,8 +214,8 @@ export function LandingPage() {
                 className="p-6 hover-scale glass border-0 animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="h-6 w-6 text-white" />
+                <div className="size-12 bg-gradient-primary rounded-lg flex items-center justify-center mb-4">
+                  <feature.icon className="size-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">

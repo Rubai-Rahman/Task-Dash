@@ -155,6 +155,31 @@
   }
 }
 
+@utility animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+@utility animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+@utility animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+@utility animate-fade-out {
+  animation: fade-out 0.3s ease-out;
+}
+@utility animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+@utility animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+@utility animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
 @utility bg-gradient-primary {
   background-image: var(--gradient-primary);
 }
@@ -164,15 +189,9 @@
 @utility bg-gradient-card {
   background-image: var(--gradient-card);
 }
+
 @utility glass {
   background-color: oklch(from var(--card-glass) l c h / 0.4);
   backdrop-filter: blur(12px);
   border: 1px solid oklch(from var(--border) l c h / 0.2);
-}
-/* Gradient text */
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
