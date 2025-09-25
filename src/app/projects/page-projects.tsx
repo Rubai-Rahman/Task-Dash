@@ -21,7 +21,7 @@ export default function ProjectsPageContent() {
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
-
+// need to remove useEffect 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
