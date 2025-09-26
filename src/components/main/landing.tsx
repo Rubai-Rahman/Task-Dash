@@ -187,7 +187,7 @@ export function LandingPage() {
               <div className="absolute -bottom-6 -right-6 size-24 bg-gradient-primary rounded-full opacity-20 animate-pulse"></div>
               <div className="absolute -top-6 -left-6 size-16 bg-gradient-secondary rounded-full opacity-30 animate-pulse"></div>
             </div>
-          </div>
+          </div> 
         </div>
       </section>
 
