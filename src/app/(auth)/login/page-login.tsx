@@ -13,7 +13,6 @@ export default function LoginPage() {
 
   const handleLogin = async (data: LoginFormData) => {
     setIsLoading(true);
-    setError('');
 
     try {
       const success = await login(data.email, data.password);
